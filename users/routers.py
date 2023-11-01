@@ -4,15 +4,13 @@ from starlette.requests import Request
 from api.users.schemas import User
 from api.users.users_manager import load_users, pwd_context, save_users
 
-username = ''
-
 router = APIRouter(
     prefix='/auth',
     tags=['Auth & Пользователи'],
 )
 
 
-@router.post("/register/", response_model=User)
+@router.post("/register/")
 def register(user: User):
     users = load_users()
     if user.username in users:
@@ -26,19 +24,23 @@ def register(user: User):
 
 @router.post("/login/")
 def login(user: User, response: Response):
-
     users = load_users()
     if user.username not in users:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Неверное имя пользователя или пароль")
     stored_password = users[user.username]
     if not pwd_context.verify(user.password, stored_password):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Неверное имя пользователя или пароль")
-    username = user.username
-    response.set_cookie(key="user", value=username, httponly=True)
+    response.set_cookie(key="user", value=user.username, httponly=True)
     return {"message": "Вход выполнен успешно"}
 
 
 @router.get("/me/")
 def get_user(request: Request):
     user = request.cookies.get('user')
-    return user
+    return user if user else {"message": "Пользователь не залогинен"}
+
+
+@router.post("/logout/")
+def logout(response: Response):
+    response.delete_cookie(key="user")
+    return {"message": "Вы вышли из системы"}
