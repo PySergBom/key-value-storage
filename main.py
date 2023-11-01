@@ -1,9 +1,9 @@
 import uvicorn
 from fastapi import FastAPI
 
-from api.datastore.routers import router as dr
-from api.transactions.routers import router as tr
-from api.users.routers import router as ur
+from datastore.routers import router as dr
+from transactions.routers import router as tr
+from users.routers import router as ur
 
 app = FastAPI()
 

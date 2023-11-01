@@ -1,4 +1,4 @@
-from api.datastore.datastore import data_store
+from datastore.datastore import data_store
 
 
 class TransactionManager:

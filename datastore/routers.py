@@ -1,8 +1,8 @@
 from fastapi import APIRouter, HTTPException, Request
 
-from api.datastore.datastore import data_store
-from api.datastore.schemas import DeleteValueRequest, SetValueRequest
-from api.transactions.transaction_manager import transaction_manager
+from datastore.datastore import data_store
+from datastore.schemas import DeleteValueRequest, SetValueRequest
+from transactions.transaction_manager import transaction_manager
 
 router = APIRouter(
     prefix="/kvs",

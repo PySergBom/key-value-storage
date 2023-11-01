@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException, Request
 
-from api.transactions.transaction_manager import transaction_manager
+from transactions.transaction_manager import transaction_manager
 
 router = APIRouter(
     prefix="/transactions",
