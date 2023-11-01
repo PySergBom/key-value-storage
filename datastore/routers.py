@@ -5,17 +5,17 @@ from api.datastore.schemas import SetValueRequest, DeleteValueRequest
 from api.transactions.transaction_manager import transaction_manager
 
 router = APIRouter(
-    prefix='/kvs',
-    tags=['Key Value Store'],
+    prefix="/kvs",
+    tags=["Key Value Store"],
 )
 
-@router.post("/set_value")
+@router.post("/set_value/")
 def set_value(request: SetValueRequest, request_cookies: Request):
 
     key, value = request.key, request.value
     if transaction_manager.transaction_stack:
         if transaction_manager.transaction_initiator != request_cookies.cookies.get("user"):
-            raise HTTPException(status_code=400, detail='Данные доступны только для чтения. Открыта транзакция')
+            raise HTTPException(status_code=400, detail="Данные доступны только для чтения. Открыта транзакция")
         transaction_manager.current_transaction[key] = value
         return {"message": "Значение задано в транзакции"}
     try:
@@ -25,7 +25,7 @@ def set_value(request: SetValueRequest, request_cookies: Request):
         raise HTTPException(status_code=400, detail=str(e))
 
 
-@router.get("/get_value")
+@router.get("/get_value/")
 def get_value(key: str):
     value = data_store.get_value(key)
     if value is not None:
@@ -33,7 +33,7 @@ def get_value(key: str):
     raise HTTPException(status_code=404, detail="Ключ не найден")
 
 
-@router.delete("/delete_value")
+@router.delete("/delete_value/")
 def delete_value(request: DeleteValueRequest):
     key = request.key
     if transaction_manager.transaction_stack:

@@ -5,8 +5,8 @@ from api.users.schemas import User
 from api.users.users_manager import load_users, pwd_context, save_users
 
 router = APIRouter(
-    prefix='/auth',
-    tags=['Auth & Пользователи'],
+    prefix="/auth",
+    tags=["Auth & Пользователи"],
 )
 
 
@@ -36,7 +36,7 @@ def login(user: User, response: Response):
 
 @router.get("/me/")
 def get_user(request: Request):
-    user = request.cookies.get('user')
+    user = request.cookies.get("user")
     return user if user else {"message": "Пользователь не залогинен"}
 
 
