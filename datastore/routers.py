@@ -33,7 +33,7 @@ def get_value(key: str):
     value = data_store.get_value(key)
     if value is not None:
         return {"value": value}
-    raise HTTPException(status_code=404, detail="Ключ не найден")
+    raise HTTPException(status_code=404, detail="Key not found")
 
 
 @router.delete("/delete_value/")

@@ -1,6 +1,8 @@
 import json
 from typing import Dict, Optional
 
+from fastapi import HTTPException
+
 
 class DataStore:
     def __init__(self):
@@ -20,7 +22,7 @@ class DataStore:
 
     def set_value(self, key: str, value: str):
         if key in self.data:
-            raise KeyError("The key already exists")
+            raise HTTPException(status_code=400, detail="The key already exists")
         self.data[key] = value
         self.save_data_to_file()
 
