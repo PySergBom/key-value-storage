@@ -1,7 +1,7 @@
-from fastapi import APIRouter, Request, HTTPException
+from fastapi import APIRouter, HTTPException, Request
 
 from api.datastore.datastore import data_store
-from api.datastore.schemas import SetValueRequest, DeleteValueRequest
+from api.datastore.schemas import DeleteValueRequest, SetValueRequest
 from api.transactions.transaction_manager import transaction_manager
 
 router = APIRouter(
@@ -9,13 +9,16 @@ router = APIRouter(
     tags=["Key Value Store"],
 )
 
+
 @router.post("/set_value/")
 def set_value(request: SetValueRequest, request_cookies: Request):
-
     key, value = request.key, request.value
-    if transaction_manager.transaction_stack:
-        if transaction_manager.transaction_initiator != request_cookies.cookies.get("user"):
-            raise HTTPException(status_code=400, detail="Данные доступны только для чтения. Открыта транзакция")
+    if transaction_manager.stack:
+        if transaction_manager.initiator != request_cookies.cookies.get("user"):
+            raise HTTPException(
+                status_code=400,
+                detail="Данные доступны только для чтения. Открыта транзакция"
+            )
         transaction_manager.current_transaction[key] = value
         return {"message": "Значение задано в транзакции"}
     try:
@@ -36,8 +39,11 @@ def get_value(key: str):
 @router.delete("/delete_value/")
 def delete_value(request: DeleteValueRequest):
     key = request.key
-    if transaction_manager.transaction_stack:
-        raise HTTPException(status_code=400, detail="Транзакция уже открыта")
+    if transaction_manager.stack:
+        raise HTTPException(
+            status_code=400,
+            detail="Открыта транзакция. Удаление не возможно"
+        )
     try:
         data_store.delete_value(key)
         return {"message": "Значение удалено"}
