@@ -12,12 +12,12 @@ class TransactionManager:
 
     def rollback(self):
         if not self.stack:
-            raise ValueError("Нет активных транзакций")
+            raise ValueError("No active transactions")
         self.current_transaction = self.stack.pop()
 
     def commit(self):
         if not self.stack:
-            raise ValueError("Нет активных транзакций")
+            raise ValueError("No active transactions")
         data_store.data.update(self.current_transaction)
         data_store.save_data_to_file()
         self.stack = []

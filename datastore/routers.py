@@ -17,13 +17,13 @@ def set_value(request: SetValueRequest, request_cookies: Request):
         if transaction_manager.initiator != request_cookies.cookies.get("user"):
             raise HTTPException(
                 status_code=400,
-                detail="Данные доступны только для чтения. Открыта транзакция"
+                detail="The data is read-only. Transaction opened"
             )
         transaction_manager.current_transaction[key] = value
-        return {"message": "Значение задано в транзакции"}
+        return {"message": "The value is set in the transaction"}
     try:
         data_store.set_value(key, value)
-        return {"message": "Значение сохранено"}
+        return {"message": "The value is saved"}
     except KeyError as e:
         raise HTTPException(status_code=400, detail=str(e))
 
@@ -42,11 +42,11 @@ def delete_value(request: DeleteValueRequest):
     if transaction_manager.stack:
         raise HTTPException(
             status_code=400,
-            detail="Открыта транзакция. Удаление не возможно"
+            detail="A transaction has been opened. Deletion is not possible"
         )
     try:
         data_store.delete_value(key)
-        return {"message": "Значение удалено"}
+        return {"message": "Value removed"}
     except KeyError as e:
         raise HTTPException(status_code=404, detail=str(e))
 
