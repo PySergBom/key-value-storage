@@ -45,4 +45,5 @@ http://127.0.0.1:8000/redoc
 
 <img src="https://github.com/PySergBom/key-value-storage/assets/125088101/871ec184-35b7-458e-9ce3-014dd3e574f4" width="900" />
 
+Для работы с транзакциями требуется залогинется
 
