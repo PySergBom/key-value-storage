@@ -34,7 +34,7 @@ class DataStore:
             del self.data[key]
             self.save_data_to_file()
         else:
-            raise HTTPException(status_code=404, detail="The key does not exis")
+            raise HTTPException(status_code=404, detail="The key does not exist")
 
     def find_keys(self, value: str) -> list:
         keys = [key for key, val in self.data.items() if val == value]
