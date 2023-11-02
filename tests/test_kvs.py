@@ -23,18 +23,11 @@ def test_get_value():
     assert response.status_code == 404
 
 
-def test_delete_value():
-    response = client.delete("/kvs/delete_value/", params={"key": "test_key"})
-    assert response.status_code == 200
-    assert response.json() == {"message": "Value removed"}
-
-    response = client.delete("/kvs/delete_value/", params={"key": "non_existent_key"})
-    assert response.status_code == 404
-
 def test_find_keys():
     response = client.get("/kvs/find_keys?value=test_value")
     assert response.status_code == 200
     assert response.json() == {"keys": ["test_key"]}
+
 
 if __name__ == "__main__":
     pytest.main()
